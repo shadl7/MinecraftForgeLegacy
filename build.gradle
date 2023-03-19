@@ -64,8 +64,6 @@ minecraft {
 }
 
 ext {
-    //Dirty hack, but keeps our unique version system on new jenkins
-    BUILD_NUMBER = 2838 + (System.getenv('BUILD_NUMBER') ?: project.ext.properties.buildNumber ?: 0).toInteger()
     
     JAR_SIGNER = [:]
     if (project.hasProperty('keystore')) {
@@ -294,21 +292,6 @@ artifacts {
     archives makeMdk
 }
 
-task ciWriteBuildNumber << {
-    def file = file("src/main/java/net/minecraftforge/common/ForgeVersion.java");
-    def outfile = "";
-    def ln = "\n"; //Linux line endings because we're on git!
-
-    file.eachLine{ String s ->
-        if (s.matches("^    public static final int buildVersion    = [\\d]+;\$"))
-            s = "    public static final int buildVersion    = ${BUILD_NUMBER};";
-        if (s.matches('^    public static final String mcVersion = "[^\\"]+";'))
-            s = "    public static final String mcVersion = \"${minecraft.version}\";";
-        outfile += (s+ln);
-    }
-    file.write(outfile);
-}
-
 uploadArchives {
     repositories.mavenDeployer {
 
@@ -421,8 +404,6 @@ String getVersionFromJava(File file)
         }
     }
 
-    build = BUILD_NUMBER
-
     String branch = null;
     if (!System.getenv().containsKey("GIT_BRANCH"))
     {
@@ -452,13 +433,9 @@ reobfuscate {
     ]
 }
 
-task resetBuildNumber << {
-    project.ext.properties.buildNumber = 0;
-    ciWriteBuildNumber.execute()
-}
 // re-add old tasks for jenkins compat
 // should be removed, and the jenkins fixed when no longer building with FG 1.2
-task setupForge { dependsOn 'setup', 'ciWriteBuildNumber' }
+task setupForge { dependsOn 'setup'}
 task buildPackages { dependsOn 'build' }
 
 //Temporary hack to fix compile errors caused by mappings shading in Bootstrap
