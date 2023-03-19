@@ -4,7 +4,7 @@ buildscript {
         mavenCentral()
         maven {
             name = "forge"
-            url = "https://files.minecraftforge.net/maven"
+            url = "https://maven.minecraftforge.net/"
         }
         maven {
             name = "sonatype"
@@ -13,10 +13,13 @@ buildscript {
         maven {
             url "https://plugins.gradle.org/m2/"
         }
+        maven {
+            name = "github"
+            url = "https://github.com/juanmuscaria/maven/raw/master"
+        }
     }
     dependencies {
-        classpath 'edu.sc.seis.launch4j:launch4j:2.4.6'
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle2:[2.3-1.0.0-SNAPSHOT,)'
     }
 }
 
@@ -26,7 +29,6 @@ plugins {
 
 apply plugin: "maven"
 def patcher_plugin = plugins.apply('net.minecraftforge.gradle.patcher')
-apply plugin: 'edu.sc.seis.launch4j'
 
 minecraft.version = "1.12.2"
 
@@ -283,27 +285,12 @@ task makeMdk(type: Zip) {
 }
 tasks.build.dependsOn makeMdk
 
-// launch4j
-
-launch4j {
-    jar = installer.archivePath.canonicalPath
-    outfile = "${project.name}-${project.version}-installer-win.exe"
-    icon = file('icon.ico').canonicalPath
-    manifest = file('l4jManifest.xml').canonicalPath
-    jreMinVersion = '1.8.0_101'
-    initialHeapPercent = 5
-    maxHeapPercent = 100
-}
-tasks.createExe.dependsOn installer
-tasks.build.dependsOn 'launch4j'
-
 // MAVEN
 
 artifacts {
     archives(changelog.outputs.files.singleFile) {
         classifier = 'changelog'
     }
-    archives file('build/' + launch4j.outputDir + '/' + launch4j.outfile)
     archives makeMdk
 }
 
