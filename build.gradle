@@ -127,16 +127,13 @@ license {
 task changelog() {
     ext {
         changelog_old = rootProject.file('legacy_changelog.txt')
-        changelog_new = rootProject.file('build/changelog_new.txt')
         output = rootProject.file('build/changelog.txt')
     }
     inputs.file changelog_old
-    if (changelog_new.exists())
-        inputs.file changelog_new
     outputs.file output
     
     doLast {
-        output.text = changelog_new.text + '\n' + changelog_old.text
+        output.text = changelog_old.text
     }
 }
 
