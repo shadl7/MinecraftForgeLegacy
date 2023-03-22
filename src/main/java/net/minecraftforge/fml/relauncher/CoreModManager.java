@@ -631,6 +631,8 @@ public class CoreModManager {
         Launch.blackboard.put("fml.deobfuscatedEnvironment", deobfuscatedEnvironment);
         tweaker.injectCascadingTweak("net.minecraftforge.fml.common.launcher.FMLDeobfTweaker");
         tweakSorting.put("net.minecraftforge.fml.common.launcher.FMLDeobfTweaker", 1000);
+        tweaker.injectCascadingTweak("org.spongepowered.asm.launch.MixinTweaker");
+        tweakSorting.put("net.minecraftforge.fml.common.launcher.FMLDeobfTweaker", -1000);
     }
 
     public static void injectCoreModTweaks(FMLInjectionAndSortingTweaker fmlInjectionAndSortingTweaker)
