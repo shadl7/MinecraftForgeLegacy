@@ -450,3 +450,5 @@ extractMcpMappings.finalizedBy('fixParams')
 
 genGradleProjects.addCompileDep("org.spongepowered:mixin:0.8.5-SNAPSHOT")
 genGradleProjects.addRepo("sponge", "https://repo.spongepowered.org/maven")
+
+genGradleProjects.addCompileDep('net.minecraftforge:eventbus:0.0.1+:service')
