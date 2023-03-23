@@ -447,6 +447,6 @@ task fixParams << {
 fixParams.dependsOn('extractMcpMappings')
 extractMcpMappings.finalizedBy('fixParams')
 */
-
+// TODO: move to 1.12.2.json
 genGradleProjects.addCompileDep("org.spongepowered:mixin:0.8.5-SNAPSHOT")
 genGradleProjects.addRepo("sponge", "https://repo.spongepowered.org/maven")
