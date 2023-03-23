@@ -632,7 +632,7 @@ public class CoreModManager {
         tweaker.injectCascadingTweak("net.minecraftforge.fml.common.launcher.FMLDeobfTweaker");
         tweakSorting.put("net.minecraftforge.fml.common.launcher.FMLDeobfTweaker", 1000);
         tweaker.injectCascadingTweak("org.spongepowered.asm.launch.MixinTweaker");
-        tweakSorting.put("\"org.spongepowered.asm.launch.MixinTweaker", -1000);
+        tweakSorting.put("org.spongepowered.asm.launch.MixinTweaker", -1000);
     }
 
     public static void injectCoreModTweaks(FMLInjectionAndSortingTweaker fmlInjectionAndSortingTweaker)
