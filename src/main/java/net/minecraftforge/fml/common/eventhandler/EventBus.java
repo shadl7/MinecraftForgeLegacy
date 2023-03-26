@@ -19,6 +19,16 @@
 
 package net.minecraftforge.fml.common.eventhandler;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Throwables;
+import com.google.common.collect.MapMaker;
+import com.google.common.collect.Sets;
+import com.google.common.reflect.TypeToken;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
+
+import javax.annotation.Nonnull;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -26,18 +36,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.annotation.Nonnull;
-
-import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
-
-import com.google.common.base.Preconditions;
-import com.google.common.base.Throwables;
-import com.google.common.collect.MapMaker;
-import com.google.common.collect.Sets;
-import com.google.common.reflect.TypeToken;
 
 public class EventBus implements IEventExceptionHandler
 {
@@ -144,6 +142,11 @@ public class EventBus implements IEventExceptionHandler
                         asm.invoke(event);
                         Loader.instance().setActiveModContainer(old);
                     }
+                    @Override
+                    public boolean parallelExecution()
+                    {
+                        return asm.parallelExecution();
+                    }
                 };
             }
 
@@ -177,7 +180,12 @@ public class EventBus implements IEventExceptionHandler
         int index = 0;
         try
         {
-            for (; index < listeners.length; index++)
+            // TODO: Parallel event invoke
+            /*for (; index < listeners.length; index++)
+            {
+                listeners[index].invoke(event);
+            }*/
+            for (index = 0; index < listeners.length; index++)
             {
                 listeners[index].invoke(event);
             }

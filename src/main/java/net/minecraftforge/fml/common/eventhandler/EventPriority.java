@@ -39,4 +39,10 @@ public enum EventPriority implements IEventListener
     {
         event.setPhase(this);
     }
+
+    // TODO: Add parallel invoke configuration
+    @Override
+    public boolean parallelExecution() {
+        return false;
+    }
 }
